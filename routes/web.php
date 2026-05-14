@@ -15,6 +15,11 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
+
+Route::get('boostrap', function () {
+	return view('boostrap');
+});
+
 //Route untuk menampilkan tampilan halo
 Route::get('halo', function () {
 	return "Hello World. Selamat datang halaman Tutorial Belajar Laravel Serie 1";
