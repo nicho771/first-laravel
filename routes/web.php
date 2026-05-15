@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Http\Support\Facades\Storage;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\BlogController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\FileController;
 
 Route::get('/', function () {
 	return view('welcome');
@@ -112,3 +115,26 @@ Route::post('/reset-password', [
 	ForgotPasswordController::class,
 	'resetPassword'
 ])->name('password.update');
+
+
+// Route untuk menjalankan upload file
+Route::get('/upload', function () {
+	return view('upload');
+});
+
+Route::post('/upload', function (Request $request) {
+	//Validasi File 
+	$request->validate([
+		'file' => 'required|mimes:jpg,jpeg,png,pdf|max:2048'
+	]);
+
+	//simpan file ke storage app/public/uploads
+	$path = $request->file('file')->store('uploads', 'public');
+
+	return back()->with('success', 'File berhasil diupload')->with('file', $path);
+});
+
+// Route untuk menjalankan Upload file dengan Database
+
+Route::get('/uploads', [FileController::class, 'index']);
+Route::post('/uploads', [FileController::class, 'store']);
